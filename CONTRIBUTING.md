@@ -23,6 +23,18 @@ Run the playground app:
 npm start
 ```
 
+## Linting
+
+```bash
+npm run lint
+```
+
+## Testing
+
+```bash
+npm run test
+```
+
 ## Building
 
 ```bash
@@ -41,6 +53,8 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 We have very precise rules over how our git commit messages can be formatted. This leads to **more
 readable messages** that are easy to follow when looking through the **project history**. But also,
 we use the git commit messages to **generate the Input-mask changelog**.
+
+To follow below format, after staging your files, commit them using `npm run commit`.
 
 ### Commit Message Format
 
