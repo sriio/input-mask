@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/ngneat/input-mask/compare/v1.0.2...v1.1.0) (2021-08-11)
+
+
+### Features
+
+* **package.json:** add support for v12 ([05008d1](https://github.com/ngneat/input-mask/commit/05008d1747f012fa804049e2a82ea8c21b6ffe8d)), closes [#14](https://github.com/ngneat/input-mask/issues/14)
+
 ## [1.0.2](https://github.com/ngneat/input-mask/compare/v1.0.1...v1.0.2) (2021-07-06)
 
 
