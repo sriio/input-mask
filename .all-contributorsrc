@@ -1,6 +1,6 @@
 {
   "projectName": "input-mask",
-  "projectOwner": "@ngneat",
+  "projectOwner": "ngneat",
   "repoType": "github",
   "repoHost": "https://github.com",
   "files": [
@@ -46,7 +46,17 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "pzontrop",
+      "name": "P. Zontrop",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7068447?v=4",
+      "profile": "https://github.com/pzontrop",
+      "contributions": [
+        "platform"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
