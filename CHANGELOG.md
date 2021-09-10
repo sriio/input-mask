@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/ngneat/input-mask/compare/v1.1.0...v1.2.0) (2021-09-10)
+
+
+### Bug Fixes
+
+* render initial value ([4d1f02e](https://github.com/ngneat/input-mask/commit/4d1f02e99ffbb47c454b1b656dfef0113f4484ac))
+
+
+### Features
+
+* add support for ionic input ([1857303](https://github.com/ngneat/input-mask/commit/185730395dc92ab03e0adbb061582d9886206913)), closes [#19](https://github.com/ngneat/input-mask/issues/19)
+
 # [1.1.0](https://github.com/ngneat/input-mask/compare/v1.0.2...v1.1.0) (2021-08-11)
 
 
