@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
-import { createMask } from './input-mask.directive';
 import { InputMaskModule } from './input-mask.module';
+import { createMask } from './constants';
 
 @Component({
   template: `
