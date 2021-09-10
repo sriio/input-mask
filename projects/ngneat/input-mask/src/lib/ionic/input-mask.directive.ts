@@ -2,7 +2,6 @@ import { isPlatformServer } from '@angular/common';
 import {
   AfterViewInit,
   Directive,
-  ElementRef,
   HostListener,
   Inject,
   Input,
@@ -14,11 +13,12 @@ import {
   Self,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl, Validator } from '@angular/forms';
+import { IonInput } from '@ionic/angular';
 import Inputmask from 'inputmask';
-import { InputmaskOptions } from './types';
+import { InputmaskOptions } from '../types';
 
-@Directive({ selector: '[inputMask]' })
-export class InputMaskDirective<T = any>
+@Directive({ selector: 'ion-input[inputMask]' })
+export class InputMaskIonicDirective<T = any>
   implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor, Validator {
   /**
    *Helps you to create input-mask based on https://github.com/RobinHerbots/Inputmask
@@ -26,20 +26,21 @@ export class InputMaskDirective<T = any>
    *Visit https://github.com/ngneat/input-mask for more info.
    */
   @Input() inputMask: InputmaskOptions<T> = {};
+  nativeInputElement: HTMLInputElement | undefined;
   inputMaskPlugin: Inputmask.Instance | undefined;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: string,
-    private elementRef: ElementRef,
     private renderer: Renderer2,
-    @Optional() @Self() public ngControl: NgControl
+    @Optional() @Self() public ngControl: NgControl,
+    private inputMaskIonInput: IonInput
   ) {
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
     }
   }
 
-  @HostListener('input', ['$event.target.value'])
+  @HostListener('ionInput', ['$event.target.value'])
   onInput = (_: any) => {};
 
   ngOnInit() {
@@ -56,14 +57,17 @@ export class InputMaskDirective<T = any>
       return;
     }
 
-    if (Object.keys(this.inputMask).length) {
-      this.inputMaskPlugin = new Inputmask(this.inputMaskOptions).mask(
-        this.elementRef.nativeElement
-      );
-      setTimeout(() => {
-        this.ngControl?.control?.updateValueAndValidity();
-      });
-    }
+    this.inputMaskIonInput.getInputElement().then((ele) => {
+      this.nativeInputElement = ele;
+      if (Object.keys(this.inputMask).length) {
+        this.inputMaskPlugin = new Inputmask(this.inputMaskOptions).mask(
+          this.nativeInputElement as HTMLInputElement
+        );
+        setTimeout(() => {
+          this.ngControl?.control?.updateValueAndValidity();
+        });
+      }
+    });
   }
 
   get inputMaskOptions(): Inputmask.Options {
@@ -72,7 +76,9 @@ export class InputMaskDirective<T = any>
   }
 
   writeValue(value: string): void {
-    this.renderer.setProperty(this.elementRef.nativeElement, 'value', value);
+    if (this.nativeInputElement) {
+      this.renderer.setProperty(this.nativeInputElement, 'value', value);
+    }
   }
 
   registerOnChange(fn: (_: T | null) => void): void {

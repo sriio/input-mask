@@ -27,18 +27,21 @@
 - 🔁  **Helps you to convert final values to desired format**
 - ☝️  **Single directive to handle everything**
 - 🛠  **All the configurations of [inputmask](https://github.com/RobinHerbots/Inputmask) provided**
+- 📱  **[Ionic framework](https://ionicframework.com/) support**
 
 ## Installation
 
-You can install it through **Angular CLI**
+### Angular
 
-```
+You can install it through **Angular CLI**, which is recommended:
+
+```bash
 ng add @ngneat/input-mask
 ```
 
 or with **npm**
 
-```
+```bash
 npm install @ngneat/input-mask inputmask@5
 npm install -D @types/inputmask@5
 ```
@@ -50,6 +53,24 @@ import { InputMaskModule } from '@ngneat/input-mask';
 
 @NgModule({
   imports: [InputMaskModule],
+})
+class AppModule {}
+```
+
+### Ionic
+
+```bash
+npm install @ngneat/input-mask inputmask@5
+npm install -D @types/inputmask@5
+```
+
+For usage with ionic, import `InputMaskIonicModule`:
+
+```typescript
+import { InputMaskIonicModule } from '@ngneat/input-mask';
+
+@NgModule({
+  imports: [InputMaskIonicModule],
 })
 class AppModule {}
 ```
