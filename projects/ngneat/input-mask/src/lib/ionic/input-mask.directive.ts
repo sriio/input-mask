@@ -78,6 +78,11 @@ export class InputMaskIonicDirective<T = any>
   writeValue(value: string): void {
     if (this.nativeInputElement) {
       this.renderer.setProperty(this.nativeInputElement, 'value', value);
+    } else {
+      this.inputMaskIonInput.getInputElement().then((ele) => {
+        this.nativeInputElement = ele;
+        this.renderer.setProperty(this.nativeInputElement, 'value', value);
+      });
     }
   }
 
