@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/ngneat/input-mask/compare/v1.2.0...v2.0.0) (2021-09-13)
+
+
+### Bug Fixes
+
+* revert ionic support ([35577b9](https://github.com/ngneat/input-mask/commit/35577b9e651e7242a55155cb164f776bd8583966))
+
+
+### BREAKING CHANGES
+
+* reverting ionic support
+
 # [1.2.0](https://github.com/ngneat/input-mask/compare/v1.1.0...v1.2.0) (2021-09-10)
 
 
