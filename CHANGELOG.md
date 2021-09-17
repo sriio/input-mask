@@ -1,3 +1,22 @@
+# [3.0.0](https://github.com/ngneat/input-mask/compare/v2.0.0...v3.0.0) (2021-09-17)
+
+
+### Bug Fixes
+
+* **input-mask.directive:** handle validation when input field is empty ([2bb1299](https://github.com/ngneat/input-mask/commit/2bb12996c1374577fc2b40cf627eea34362a6bfa)), closes [#12](https://github.com/ngneat/input-mask/issues/12)
+* **input-mask.directive:** if value is null, set blank string ([a32bdb2](https://github.com/ngneat/input-mask/commit/a32bdb22c064d0cf8addb5102ebd9ede1905607b)), closes [#6](https://github.com/ngneat/input-mask/issues/6)
+* **input-mask.directive:** validation error is null if field value is balnk ([bf24dd8](https://github.com/ngneat/input-mask/commit/bf24dd8c6c4a2f0ece949e4af6ca44e9963b33f9)), closes [#12](https://github.com/ngneat/input-mask/issues/12)
+
+
+### Features
+
+* user can pass inputSelector if the host is not native input element ([d11601b](https://github.com/ngneat/input-mask/commit/d11601b962cc5023711947281b4824f80abc4e09)), closes [#19](https://github.com/ngneat/input-mask/issues/19)
+
+
+### BREAKING CHANGES
+
+* Fixed validation error value as per other standard angular form validation errors
+
 # [2.0.0](https://github.com/ngneat/input-mask/compare/v1.2.0...v2.0.0) (2021-09-13)
 
 
