@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl, Validator } from '@angular/forms';
 import Inputmask from 'inputmask';
+import { InputMaskConfig, INPUT_MASK_CONFIG } from './config';
 import { InputmaskOptions } from './types';
 
 @Directive({ selector: '[inputMask]' })
@@ -27,15 +28,53 @@ export class InputMaskDirective<T = any>
    */
   @Input() inputMask: InputmaskOptions<T> = {};
   inputMaskPlugin: Inputmask.Instance | undefined;
+  nativeInputElement: HTMLInputElement | undefined;
+  defaultInputMaskConfig = new InputMaskConfig();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: string,
-    private elementRef: ElementRef,
+    private elementRef: ElementRef<HTMLInputElement | any>,
     private renderer: Renderer2,
-    @Optional() @Self() public ngControl: NgControl
+    @Optional() @Self() public ngControl: NgControl,
+    @Inject(INPUT_MASK_CONFIG) config: InputMaskConfig
   ) {
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
+    }
+    if (this.elementRef.nativeElement.tagName === 'INPUT') {
+      this.nativeInputElement = this.elementRef.nativeElement;
+    } else {
+      this.defaultInputMaskConfig = {
+        ...this.defaultInputMaskConfig,
+        ...config,
+      };
+      if (this.defaultInputMaskConfig.isAsync) {
+        // Create an observer instance linked to the callback function
+        const mutationObserver = new MutationObserver((mutationsList) => {
+          for (const mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+              const nativeInputElement = this.elementRef.nativeElement.querySelector(
+                this.defaultInputMaskConfig.inputSelector
+              );
+              if (nativeInputElement) {
+                this.nativeInputElement = nativeInputElement;
+                mutationObserver.disconnect();
+                this.initInputMask();
+              }
+            }
+          }
+        });
+
+        // Start observing the target node for configured mutations
+        mutationObserver.observe(this.elementRef.nativeElement, {
+          childList: true,
+          subtree: true,
+        });
+      } else {
+        this.nativeInputElement = this.elementRef.nativeElement.querySelector(
+          this.defaultInputMaskConfig.inputSelector
+        );
+      }
     }
   }
 
@@ -51,19 +90,25 @@ export class InputMaskDirective<T = any>
     this.inputMaskPlugin?.remove();
   }
 
-  ngAfterViewInit() {
-    if (isPlatformServer(this.platformId)) {
-      return;
-    }
+  initInputMask() {
+    if (this.nativeInputElement) {
+      if (isPlatformServer(this.platformId)) {
+        return;
+      }
 
-    if (Object.keys(this.inputMask).length) {
-      this.inputMaskPlugin = new Inputmask(this.inputMaskOptions).mask(
-        this.elementRef.nativeElement
-      );
-      setTimeout(() => {
-        this.ngControl?.control?.updateValueAndValidity();
-      });
+      if (Object.keys(this.inputMask).length) {
+        this.inputMaskPlugin = new Inputmask(this.inputMaskOptions).mask(
+          this.nativeInputElement as HTMLInputElement
+        );
+        setTimeout(() => {
+          this.ngControl?.control?.updateValueAndValidity();
+        });
+      }
     }
+  }
+
+  ngAfterViewInit() {
+    this.initInputMask();
   }
 
   get inputMaskOptions(): Inputmask.Options {
@@ -72,7 +117,9 @@ export class InputMaskDirective<T = any>
   }
 
   writeValue(value: string): void {
-    this.renderer.setProperty(this.elementRef.nativeElement, 'value', value);
+    if (this.nativeInputElement) {
+      this.renderer.setProperty(this.nativeInputElement, 'value', value);
+    }
   }
 
   registerOnChange(fn: (_: T | null) => void): void {
@@ -87,6 +134,6 @@ export class InputMaskDirective<T = any>
   validate(): { [key: string]: any } | null {
     return this.inputMaskPlugin && this.inputMaskPlugin.isValid()
       ? null
-      : { inputMask: false };
+      : { inputMask: true };
   }
 }

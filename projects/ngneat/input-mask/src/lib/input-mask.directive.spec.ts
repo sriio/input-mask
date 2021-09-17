@@ -1,14 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { InputMaskModule } from './input-mask.module';
 import { createMask } from './constants';
+import { InputmaskOptions } from './types';
+import { fakeAsync } from '@angular/core/testing';
+
+@Component({
+  selector: 'lib-custom-input',
+  template: `<input
+    *ngIf="!isAsync"
+    class="lib-custom-input"
+    [formControl]="formControl"
+    [inputMask]="inputMask"
+    [placeholder]="placeholder"
+  />`,
+})
+class CustomInputComponent implements OnInit {
+  @Input() formControl!: FormControl;
+  @Input() inputMask!: InputmaskOptions<any>;
+  @Input() placeholder: string | undefined;
+  @Input() isAsync = false;
+  ngOnInit() {
+    if (this.isAsync) {
+      setTimeout(() => {
+        this.isAsync = false;
+      }, 1000);
+    }
+  }
+}
 
 @Component({
   template: `
     <input class="date" [inputMask]="dateMask" [formControl]="dateFC" />
     <input class="ip" [inputMask]="ipAddressMask" [formControl]="ipFC" />
     <input class="initDate" [inputMask]="dateMask" [formControl]="initDateFC" />
+    <lib-custom-input
+      [formControl]="dateFCCustom"
+      [inputMask]="dateMask"
+      [isAsync]="isAsync"
+      placeholder="Date"
+    ></lib-custom-input>
   `,
 })
 class TestComponent {
@@ -28,13 +60,17 @@ class TestComponent {
 
   ipAddressMask = createMask({ alias: 'ip' });
   ipFC = new FormControl('');
+
+  dateFCCustom = new FormControl('');
+  isAsync = false;
 }
 
 describe('InputMaskDirective', () => {
   let spectator: Spectator<TestComponent>;
   const createComponent = createComponentFactory({
     component: TestComponent,
-    imports: [ReactiveFormsModule, InputMaskModule],
+    imports: [ReactiveFormsModule, InputMaskModule.forRoot({ isAsync: true })],
+    declarations: [CustomInputComponent],
   });
 
   beforeEach(() => {
@@ -70,4 +106,45 @@ describe('InputMaskDirective', () => {
     const input = spectator.query('.initDate') as HTMLInputElement;
     expect(input.value).toEqual('28/02/1992');
   });
+
+  it('should update the non-native UI value as per mask', () => {
+    const input = spectator.query('.lib-custom-input') as HTMLInputElement;
+    spectator.typeInElement('28021992', input);
+    expect(input.value).toEqual('28/02/1992');
+  });
+
+  it('should update the non-native control value as per mask parser', () => {
+    spectator.typeInElement('28021992', '.lib-custom-input');
+    expect(spectator.component.dateFCCustom.value).toEqual(
+      new Date(1992, 1, 28)
+    );
+  });
+
+  it('should make non-native form control invalid for non-compliant value', () => {
+    spectator.typeInElement('abcd', '.lib-custom-input');
+    expect(spectator.component.dateFCCustom.invalid).toBeTrue();
+  });
+
+  it('should render non-native with initial value', () => {
+    spectator.component.dateFCCustom.setValue('28/02/1992');
+    const input = spectator.query('.lib-custom-input') as HTMLInputElement;
+    expect(input.value).toEqual('28/02/1992');
+  });
+
+  it('should capture the input asynchronously', fakeAsync(() => {
+    spectator.component.isAsync = true;
+    spectator.detectChanges();
+
+    let input = spectator.query('.lib-custom-input') as HTMLInputElement;
+    expect(input).toBeNull();
+
+    spectator.component.isAsync = false;
+    spectator.detectChanges();
+
+    spectator.tick(1000);
+
+    input = spectator.query('.lib-custom-input') as HTMLInputElement;
+    spectator.component.dateFCCustom.setValue('28/02/1992');
+    expect(input.value).toEqual('28/02/1992');
+  }));
 });
