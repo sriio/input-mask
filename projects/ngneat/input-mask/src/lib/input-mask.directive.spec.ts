@@ -96,9 +96,9 @@ describe('InputMaskDirective', () => {
   });
 
   it('should make form control invalid for non-compliant value', () => {
-    spectator.typeInElement('abcd', '.date');
+    spectator.typeInElement('28', '.date');
     expect(spectator.component.dateFC.invalid).toBeTrue();
-    spectator.typeInElement('abcd', '.ip');
+    spectator.typeInElement('1', '.ip');
     expect(spectator.component.ipFC.invalid).toBeTrue();
   });
 
@@ -121,7 +121,7 @@ describe('InputMaskDirective', () => {
   });
 
   it('should make non-native form control invalid for non-compliant value', () => {
-    spectator.typeInElement('abcd', '.lib-custom-input');
+    spectator.typeInElement('28', '.lib-custom-input');
     expect(spectator.component.dateFCCustom.invalid).toBeTrue();
   });
 
