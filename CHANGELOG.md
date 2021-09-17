@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/ngneat/input-mask/compare/v3.0.0...v3.0.1) (2021-09-17)
+
+
+### Bug Fixes
+
+* **input-mask.directive:** disconnect mutation observer on destroy ([8458937](https://github.com/ngneat/input-mask/commit/8458937b714e02ee48f3440eae8fb6b92608f721))
+
 # [3.0.0](https://github.com/ngneat/input-mask/compare/v2.0.0...v3.0.0) (2021-09-17)
 
 
