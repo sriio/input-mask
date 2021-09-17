@@ -118,7 +118,7 @@ export class InputMaskDirective<T = any>
 
   writeValue(value: string): void {
     if (this.nativeInputElement) {
-      this.renderer.setProperty(this.nativeInputElement, 'value', value);
+      this.renderer.setProperty(this.nativeInputElement, 'value', value ?? '');
     }
   }
 
