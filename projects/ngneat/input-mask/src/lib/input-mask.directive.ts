@@ -30,6 +30,7 @@ export class InputMaskDirective<T = any>
   inputMaskPlugin: Inputmask.Instance | undefined;
   nativeInputElement: HTMLInputElement | undefined;
   defaultInputMaskConfig = new InputMaskConfig();
+  private mutationObserver: MutationObserver | undefined;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: string,
@@ -50,7 +51,7 @@ export class InputMaskDirective<T = any>
       };
       if (this.defaultInputMaskConfig.isAsync) {
         // Create an observer instance linked to the callback function
-        const mutationObserver = new MutationObserver((mutationsList) => {
+        this.mutationObserver = new MutationObserver((mutationsList) => {
           for (const mutation of mutationsList) {
             if (mutation.type === 'childList') {
               const nativeInputElement = this.elementRef.nativeElement.querySelector(
@@ -58,7 +59,7 @@ export class InputMaskDirective<T = any>
               );
               if (nativeInputElement) {
                 this.nativeInputElement = nativeInputElement;
-                mutationObserver.disconnect();
+                this.mutationObserver?.disconnect();
                 this.initInputMask();
               }
             }
@@ -66,7 +67,7 @@ export class InputMaskDirective<T = any>
         });
 
         // Start observing the target node for configured mutations
-        mutationObserver.observe(this.elementRef.nativeElement, {
+        this.mutationObserver.observe(this.elementRef.nativeElement, {
           childList: true,
           subtree: true,
         });
@@ -88,6 +89,7 @@ export class InputMaskDirective<T = any>
 
   ngOnDestroy(): void {
     this.inputMaskPlugin?.remove();
+    this.mutationObserver?.disconnect();
   }
 
   initInputMask() {
