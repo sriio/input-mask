@@ -132,7 +132,9 @@ export class InputMaskDirective<T = any>
   registerOnTouched(fn: any): void {}
 
   validate(): { [key: string]: any } | null {
-    return this.inputMaskPlugin && this.inputMaskPlugin.isValid()
+    const isEmptyValue = !this.ngControl?.control?.value?.length;
+    return isEmptyValue ||
+      (this.inputMaskPlugin && this.inputMaskPlugin.isValid())
       ? null
       : { inputMask: true };
   }
