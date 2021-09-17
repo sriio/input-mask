@@ -56,6 +56,24 @@ import { InputMaskModule } from '@ngneat/input-mask';
 class AppModule {}
 ```
 
+## Config
+
+There few configuration options available with `InputMaskModule`:
+
+```typescript
+import { InputMaskModule } from '@ngneat/input-mask';
+
+@NgModule({
+  imports: [InputMaskModule.forRoot({ inputSelector: 'input', isAsync: true })],
+})
+class AppModule {}
+```
+
+| Option          | Type      | Description                                                                                                                                                                                   | Default Value |
+| --------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `inputSelector` | `string`  | CSS selector, which will be used with `querySelector` to get the native input from host element. This is useful when you want to apply input-mask to child `<input>` of your custom-component | `input`       |
+| `isAsync`       | `boolean` | If set `true`, `MutationObserver` will be used to look for changes until it finds input with `inputSelector`                                                                                  | `false`       |
+
 ## Usage examples
 
 ### 1. Date
@@ -161,6 +179,73 @@ export class AppComponent {
 }
 ```
 
+### 6. Custom Component
+
+If you have some component and you want to apply input-mask to the inner `<input>` element of that component, you can do that.
+
+For example, let's assume you have a `CustomInputComponent`:
+
+```typescript
+@Component({
+  selector: 'app-custom-input',
+  template: `
+  <input
+    [formControl]="formControl"
+    [inputMask]="inputMask"
+    [placeholder]="placeholder"
+  />
+  `
+})
+export class CustomInputComponent {
+  @Input() formControl!: FormControl;
+  @Input() inputMask!: InputmaskOptions<any>;
+  @Input() placeholder: string | undefined;
+}
+```
+
+And your `AppComponent` looks like this:
+
+```typescript
+@Component({
+  selector: 'app-root',
+  template: `
+  <app-custom-input
+    [formControl]="dateFCCustom"
+    [inputMask]="dateInputMaskCustom"
+    placeholder="Date"
+  ></app-custom-input>
+  `,
+})
+export class AppComponent {
+  dateInputMaskCustom = createMask<Date>({
+    alias: 'datetime',
+    inputFormat: 'dd/mm/yyyy',
+    parser: (value: string) => {
+      const values = value.split('/');
+      const year = +values[2];
+      const month = +values[1] - 1;
+      const date = +values[0];
+      return new Date(year, month, date);
+    },
+  });
+  dateFCCustom = new FormControl('');
+}
+```
+
+So to apply input-mask on `CustomInputComponent`, use configuration with `InputMaskModule` like below:
+
+```typescript
+import { InputMaskModule } from '@ngneat/input-mask';
+
+@NgModule({
+  imports: [InputMaskModule.forRoot({
+    isAsync: false, // set to true if native input is lazy loaded
+    inputSelector: 'input'
+  })],
+})
+class AppModule {}
+```
+
 ### More examples
 
 All examples are available on [stackblitz](https://stackblitz.com/edit/angular-ivy-6greu1?file=src/app/app.component.ts).
@@ -174,7 +259,7 @@ When `[inputMask]` is used with `[formControl]`, it adds validation out-of-the b
 If the validation fails, the form-control will have below error:
 
 ```json
-{ inputMask: false }
+{ inputMask: true }
 ```
 
 ## `createMask` wrapper function

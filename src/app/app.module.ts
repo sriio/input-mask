@@ -4,10 +4,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { InputMaskModule } from '@ngneat/input-mask';
 
 import { AppComponent } from './app.component';
+import { CustomInputComponent } from './custom-input/custom-input.component';
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule, InputMaskModule, ReactiveFormsModule],
+  declarations: [AppComponent, CustomInputComponent],
+  imports: [
+    BrowserModule,
+    InputMaskModule.forRoot({ isAsync: true }),
+    ReactiveFormsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
