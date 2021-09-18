@@ -2,7 +2,7 @@ import { Tree } from '@angular-devkit/schematics';
 import * as ts from 'typescript';
 
 /**
- * Whether the Angular module in the given path imports the specifed module class name.
+ * Whether the Angular module in the given path imports the specified module class name.
  */
 export const hasNgModuleImport = (
   tree: Tree,
