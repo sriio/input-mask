@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { createMask } from '@ngneat/input-mask';
 
 @Component({
@@ -44,6 +44,6 @@ export class AppComponent {
 
   ipAddressMask = createMask({ alias: 'ip' });
   ipAddress = new FormControl('');
-  dateFC = new FormControl('');
+  dateFC = new FormControl('', [Validators.required]);
   dateFCCustom = new FormControl('');
 }
