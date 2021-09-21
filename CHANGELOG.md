@@ -1,3 +1,10 @@
+## [3.0.2](https://github.com/ngneat/input-mask/compare/v3.0.1...v3.0.2) (2021-09-21)
+
+
+### Bug Fixes
+
+* **input-mask.directive:** keep existing validators of form-control ([4531e01](https://github.com/ngneat/input-mask/commit/4531e0177c6a8074f2912d040c6c92565fd21443))
+
 ## [3.0.1](https://github.com/ngneat/input-mask/compare/v3.0.0...v3.0.1) (2021-09-17)
 
 
