@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { InputMaskModule } from './input-mask.module';
 import { createMask } from './constants';
@@ -55,7 +55,7 @@ class TestComponent {
       return new Date(year, month, date);
     },
   });
-  dateFC = new FormControl('');
+  dateFC = new FormControl('', [Validators.required]);
   initDateFC = new FormControl('28/02/1992');
 
   ipAddressMask = createMask({ alias: 'ip' });
@@ -93,6 +93,17 @@ describe('InputMaskDirective', () => {
   it('should update the control value as per mask parser', () => {
     spectator.typeInElement('28021992', '.date');
     expect(spectator.component.dateFC.value).toEqual(new Date(1992, 1, 28));
+  });
+
+  it('should keep the existing validators', () => {
+    expect(spectator.component.dateFC.invalid).toBeTrue();
+    expect(spectator.component.dateFC.errors).toHaveProperty('required');
+    expect(spectator.component.dateFC.errors).not.toHaveProperty('inputMask');
+
+    spectator.typeInElement('28', '.date');
+    expect(spectator.component.dateFC.invalid).toBeTrue();
+    expect(spectator.component.dateFC.errors).not.toHaveProperty('required');
+    expect(spectator.component.dateFC.errors).toHaveProperty('inputMask');
   });
 
   it('should make form control invalid for non-compliant value', () => {
