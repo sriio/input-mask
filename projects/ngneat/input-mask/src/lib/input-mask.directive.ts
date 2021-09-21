@@ -17,6 +17,7 @@ import {
   AbstractControl,
   ControlValueAccessor,
   NgControl,
+  Validator,
 } from '@angular/forms';
 import Inputmask from 'inputmask';
 import { InputMaskConfig, INPUT_MASK_CONFIG } from './config';
@@ -26,7 +27,7 @@ import { InputmaskOptions } from './types';
   selector: '[inputMask]',
 })
 export class InputMaskDirective<T = any>
-  implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {
+  implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor, Validator {
   /**
    *Helps you to create input-mask based on https://github.com/RobinHerbots/Inputmask
    *Supports form-validation out-of-the box.
