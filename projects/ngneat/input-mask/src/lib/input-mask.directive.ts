@@ -6,6 +6,7 @@ import {
   HostListener,
   Inject,
   Input,
+  NgZone,
   OnDestroy,
   OnInit,
   Optional,
@@ -44,7 +45,8 @@ export class InputMaskDirective<T = any>
     private elementRef: ElementRef<HTMLInputElement | any>,
     private renderer: Renderer2,
     @Optional() @Self() public ngControl: NgControl,
-    @Inject(INPUT_MASK_CONFIG) config: InputMaskConfig
+    @Inject(INPUT_MASK_CONFIG) config: InputMaskConfig,
+    private ngZone: NgZone
   ) {
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
@@ -73,20 +75,22 @@ export class InputMaskDirective<T = any>
   }
 
   initInputMask() {
-    if (this.nativeInputElement) {
-      if (isPlatformServer(this.platformId)) {
-        return;
-      }
-
-      if (Object.keys(this.inputMask).length) {
-        this.inputMaskPlugin = new Inputmask(this.inputMaskOptions).mask(
-          this.nativeInputElement as HTMLInputElement
-        );
-        setTimeout(() => {
-          this.ngControl?.control?.updateValueAndValidity();
-        });
-      }
+    if (
+      isPlatformServer(this.platformId) ||
+      !this.nativeInputElement ||
+      !Object.keys(this.inputMask).length
+    ) {
+      return;
     }
+
+    this.inputMaskPlugin = this.ngZone.runOutsideAngular(() =>
+      new Inputmask(this.inputMaskOptions).mask(
+        this.nativeInputElement as HTMLInputElement
+      )
+    );
+    setTimeout(() => {
+      this.ngControl?.control?.updateValueAndValidity();
+    });
   }
 
   ngAfterViewInit() {

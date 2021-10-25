@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ApplicationRef, Component, Input, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { InputMaskModule } from './input-mask.module';
@@ -158,4 +158,36 @@ describe('InputMaskDirective', () => {
     spectator.component.dateFCCustom.setValue('28/02/1992');
     expect(input.value).toEqual('28/02/1992');
   }));
+});
+
+describe('Change detection', () => {
+  @Component({
+    template:
+      '<input class="ip" [inputMask]="ipAddressMask" [formControl]="ipFC" />',
+  })
+  class ChangeDetectionTestComponent {
+    ipAddressMask = createMask({ alias: 'ip' });
+    ipFC = new FormControl('');
+  }
+
+  const createComponent = createComponentFactory({
+    component: ChangeDetectionTestComponent,
+    imports: [InputMaskModule, ReactiveFormsModule],
+  });
+
+  it('should not run change detections when `mouseenter`, `mouseleave` and `click` events are fired on the input', () => {
+    // Arrange
+    const spectator = createComponent();
+    const appRef = spectator.inject(ApplicationRef);
+    const spy = spyOn(appRef, 'tick').and.callThrough();
+    const input = spectator.query('input') as HTMLInputElement;
+    // Act
+    // Caretaker note: `spectator.dispatchMouseEvent` is not used here explicitly
+    // since it runs `detectChanges()` internally.
+    input.dispatchEvent(new MouseEvent('mouseenter'));
+    input.dispatchEvent(new MouseEvent('mouseleave'));
+    input.dispatchEvent(new MouseEvent('click'));
+    // Assert
+    expect(spy).toHaveBeenCalledTimes(0);
+  });
 });
