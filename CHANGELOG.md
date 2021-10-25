@@ -1,3 +1,10 @@
+## [3.0.3](https://github.com/ngneat/input-mask/compare/v3.0.2...v3.0.3) (2021-10-25)
+
+
+### Performance Improvements
+
+* reduce change detection cycles ([f810fcc](https://github.com/ngneat/input-mask/commit/f810fcc85e9c53a385acd2a26fe084eb5aa37afc))
+
 ## [3.0.2](https://github.com/ngneat/input-mask/compare/v3.0.1...v3.0.2) (2021-09-21)
 
 
