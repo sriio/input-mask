@@ -1,3 +1,10 @@
+## [3.0.4](https://github.com/ngneat/input-mask/compare/v3.0.3...v3.0.4) (2021-10-28)
+
+
+### Bug Fixes
+
+* **input-mask.directive:** check if inputMaskPlugin is defined in validate method ([c7aacb3](https://github.com/ngneat/input-mask/commit/c7aacb382c635fd313901a9ef5200a3fb8b3ad07)), closes [#34](https://github.com/ngneat/input-mask/issues/34)
+
 ## [3.0.3](https://github.com/ngneat/input-mask/compare/v3.0.2...v3.0.3) (2021-10-25)
 
 
