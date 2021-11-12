@@ -1,3 +1,17 @@
+# [4.0.0](https://github.com/ngneat/input-mask/compare/v3.0.4...v4.0.0) (2021-11-12)
+
+
+### Features
+
+* upgrade to Angular 13 and support modern package format ([8d3da96](https://github.com/ngneat/input-mask/commit/8d3da96d4c7cede4a0f3750ecd2dada6cc4618a5))
+
+
+### BREAKING CHANGES
+
+* The `@ngneat/input-mask` is shipped with `.mjs` files,
+following the APF (Angular Package Format) spec starting from Angular 13.
+`.mjs` files are compatible only with Angular 13 version and higher.
+
 ## [3.0.4](https://github.com/ngneat/input-mask/compare/v3.0.3...v3.0.4) (2021-10-28)
 
 
