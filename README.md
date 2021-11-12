@@ -20,13 +20,42 @@
 
 > @ngneat/input-mask is an angular library that creates an input mask. Behind the scene, it uses [inputmask](https://github.com/RobinHerbots/Inputmask).
 
+## Compatibility with Angular Versions
+
+<table>
+  <thead>
+    <tr>
+      <th>@ngneat/input-mask</th>
+      <th>Angular</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        3.x
+      </td>
+      <td>
+        >= 11.2.7 < 13
+      </td>
+    </tr>
+    <tr>
+      <td>
+        4.x
+      </td>
+      <td>
+        >= 13
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 ## Features
 
-- 🔡  **Support for form validation**
-- 🎭  **Wrapper function to easily create input-masks**
-- 🔁  **Helps you to convert final values to desired format**
-- ☝️  **Single directive to handle everything**
-- 🛠  **All the configurations of [inputmask](https://github.com/RobinHerbots/Inputmask) provided**
+- 🔡 **Support for form validation**
+- 🎭 **Wrapper function to easily create input-masks**
+- 🔁 **Helps you to convert final values to desired format**
+- ☝️ **Single directive to handle everything**
+- 🛠 **All the configurations of [inputmask](https://github.com/RobinHerbots/Inputmask) provided**
 
 ## Installation
 
@@ -88,7 +117,11 @@ import { createMask } from '@ngneat/input-mask';
 @Component({
   selector: 'app-root',
   template: `
-    <input [inputMask]="dateInputMask" [formControl]="dateFC" placeholder="dd/mm/yyyy">
+    <input
+      [inputMask]="dateInputMask"
+      [formControl]="dateFC"
+      placeholder="dd/mm/yyyy"
+    />
   `,
 })
 export class AppComponent {
@@ -115,7 +148,11 @@ export class AppComponent {
 ```typescript
 @Component({
   template: `
-    <input [inputMask]="ipAddressMask" [formControl]="ipFC" placeholder="_._._._">
+    <input
+      [inputMask]="ipAddressMask"
+      [formControl]="ipFC"
+      placeholder="_._._._"
+    />
   `,
 })
 export class AppComponent {
@@ -131,7 +168,11 @@ export class AppComponent {
 ```typescript
 @Component({
   template: `
-    <input [inputMask]="currencyInputMask" [formControl]="currencyFC" placeholder="$ 0.00">
+    <input
+      [inputMask]="currencyInputMask"
+      [formControl]="currencyFC"
+      placeholder="$ 0.00"
+    />
   `,
 })
 export class AppComponent {
@@ -154,7 +195,11 @@ export class AppComponent {
 ```typescript
 @Component({
   template: `
-    <input [inputMask]="licenseInputMask" [formControl]="licenseFC" placeholder="___-___">
+    <input
+      [inputMask]="licenseInputMask"
+      [formControl]="licenseFC"
+      placeholder="___-___"
+    />
   `,
 })
 export class AppComponent {
@@ -170,11 +215,15 @@ export class AppComponent {
 ```typescript
 @Component({
   template: `
-    <input [inputMask]="emailInputMask" [formControl]="emailFC" placeholder="_@_._">
+    <input
+      [inputMask]="emailInputMask"
+      [formControl]="emailFC"
+      placeholder="_@_._"
+    />
   `,
 })
 export class AppComponent {
-  emailInputMask = createMask({ alias: 'email'});
+  emailInputMask = createMask({ alias: 'email' });
   emailFC = new FormControl('');
 }
 ```
@@ -189,12 +238,12 @@ For example, let's assume you have a `CustomInputComponent`:
 @Component({
   selector: 'app-custom-input',
   template: `
-  <input
-    [formControl]="formControl"
-    [inputMask]="inputMask"
-    [placeholder]="placeholder"
-  />
-  `
+    <input
+      [formControl]="formControl"
+      [inputMask]="inputMask"
+      [placeholder]="placeholder"
+    />
+  `,
 })
 export class CustomInputComponent {
   @Input() formControl!: FormControl;
@@ -209,11 +258,11 @@ And your `AppComponent` looks like this:
 @Component({
   selector: 'app-root',
   template: `
-  <app-custom-input
-    [formControl]="dateFCCustom"
-    [inputMask]="dateInputMaskCustom"
-    placeholder="Date"
-  ></app-custom-input>
+    <app-custom-input
+      [formControl]="dateFCCustom"
+      [inputMask]="dateInputMaskCustom"
+      placeholder="Date"
+    ></app-custom-input>
   `,
 })
 export class AppComponent {
@@ -238,10 +287,12 @@ So to apply input-mask on `CustomInputComponent`, use configuration with `InputM
 import { InputMaskModule } from '@ngneat/input-mask';
 
 @NgModule({
-  imports: [InputMaskModule.forRoot({
-    isAsync: false, // set to true if native input is lazy loaded
-    inputSelector: 'input'
-  })],
+  imports: [
+    InputMaskModule.forRoot({
+      isAsync: false, // set to true if native input is lazy loaded
+      inputSelector: 'input',
+    }),
+  ],
 })
 class AppModule {}
 ```
@@ -259,7 +310,7 @@ When `[inputMask]` is used with `[formControl]`, it adds validation out-of-the b
 If the validation fails, the form-control will have below error:
 
 ```json
-{ inputMask: true }
+{ "inputMask": true }
 ```
 
 ## `createMask` wrapper function
@@ -277,7 +328,11 @@ For example, you want your users to enter date in `input[type=text]` with `dd/mm
 ```typescript
 @Component({
   template: `
-    <input [inputMask]="dateInputMask" [formControl]="dateFC" placeholder="dd/mm/yyyy">
+    <input
+      [inputMask]="dateInputMask"
+      [formControl]="dateFC"
+      placeholder="dd/mm/yyyy"
+    />
   `,
 })
 export class AppComponent {
