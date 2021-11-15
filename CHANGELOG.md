@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/ngneat/input-mask/compare/v4.0.0...v4.0.1) (2021-11-15)
+
+
+### Reverts
+
+* Revert "feat: upgrade to Angular 13 and support modern package format" ([53aa975](https://github.com/ngneat/input-mask/commit/53aa97557432fb0667e10b36797219380279c6c4))
+
 # [4.0.0](https://github.com/ngneat/input-mask/compare/v3.0.4...v4.0.0) (2021-11-12)
 
 
