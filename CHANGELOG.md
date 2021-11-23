@@ -1,3 +1,10 @@
+# [5.0.0-beta.2](https://github.com/ngneat/input-mask/compare/v5.0.0-beta.1...v5.0.0-beta.2) (2021-11-23)
+
+
+### Bug Fixes
+
+* reference namespace explicitly ([7c3bcb5](https://github.com/ngneat/input-mask/commit/7c3bcb52cf0e7f8c5806653d8d224858381e5a92))
+
 # [5.0.0-beta.1](https://github.com/ngneat/input-mask/compare/v4.0.1...v5.0.0-beta.1) (2021-11-15)
 
 
