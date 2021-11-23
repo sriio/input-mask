@@ -22,32 +22,10 @@
 
 ## Compatibility with Angular Versions
 
-<table>
-  <thead>
-    <tr>
-      <th>@ngneat/input-mask</th>
-      <th>Angular</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        3.x
-      </td>
-      <td>
-        >= 11.2.7 < 13
-      </td>
-    </tr>
-    <tr>
-      <td>
-        4.x
-      </td>
-      <td>
-        >= 13
-      </td>
-    </tr>
-  </tbody>
-</table>
+| @ngneat/input-mask | Angular        |
+| ------------------ | -------------- |
+| 4.x.x              | >= 11.2.7 < 13 |
+| 5.x.x              | >= 13          |
 
 ## Features
 
