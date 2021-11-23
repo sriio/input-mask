@@ -21,6 +21,7 @@ import {
   Validator,
 } from '@angular/forms';
 import _Inputmask from 'inputmask';
+import type Inputmask from 'inputmask';
 import { InputMaskConfig, INPUT_MASK_CONFIG } from './config';
 import { InputmaskOptions } from './types';
 
@@ -32,7 +33,7 @@ import { InputmaskOptions } from './types';
 // But we want to be backwards-compatible, so we try to read the `default` property first; otherwise, we fall back to `_Inputmask`.
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const Inputmask =
+const InputmaskConstructor =
   (_Inputmask as unknown as { default?: Inputmask.Static }).default ||
   _Inputmask;
 
@@ -97,7 +98,7 @@ export class InputMaskDirective<T = any>
     }
 
     this.inputMaskPlugin = this.ngZone.runOutsideAngular(() =>
-      new Inputmask(this.inputMaskOptions).mask(
+      new InputmaskConstructor(this.inputMaskOptions).mask(
         this.nativeInputElement as HTMLInputElement
       )
     );
