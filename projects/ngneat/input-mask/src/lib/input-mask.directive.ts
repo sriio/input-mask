@@ -20,15 +20,29 @@ import {
   NgControl,
   Validator,
 } from '@angular/forms';
-import Inputmask from 'inputmask';
+import _Inputmask from 'inputmask';
+import type Inputmask from 'inputmask';
 import { InputMaskConfig, INPUT_MASK_CONFIG } from './config';
 import { InputmaskOptions } from './types';
+
+// The initial issue: https://github.com/ngneat/input-mask/issues/40
+// Webpack 5 has module resolution changes. Libraries should configure the `output.export`
+// (https://webpack.js.org/configuration/output/#outputlibraryexport) property when published in
+// a UMD format, to tell Webpack that there's a default export.
+// The `_Inputmask` is an object with 2 properties: `{ __esModule: true, default: Inputmask }`.
+// But we want to be backwards-compatible, so we try to read the `default` property first; otherwise, we fall back to `_Inputmask`.
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const InputmaskConstructor =
+  (_Inputmask as unknown as { default?: Inputmask.Static }).default ||
+  _Inputmask;
 
 @Directive({
   selector: '[inputMask]',
 })
 export class InputMaskDirective<T = any>
-  implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor, Validator {
+  implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor, Validator
+{
   /**
    *Helps you to create input-mask based on https://github.com/RobinHerbots/Inputmask
    *Supports form-validation out-of-the box.
@@ -84,7 +98,7 @@ export class InputMaskDirective<T = any>
     }
 
     this.inputMaskPlugin = this.ngZone.runOutsideAngular(() =>
-      new Inputmask(this.inputMaskOptions).mask(
+      new InputmaskConstructor(this.inputMaskOptions).mask(
         this.nativeInputElement as HTMLInputElement
       )
     );
@@ -140,9 +154,10 @@ export class InputMaskDirective<T = any>
         this.mutationObserver = new MutationObserver((mutationsList) => {
           for (const mutation of mutationsList) {
             if (mutation.type === 'childList') {
-              const nativeInputElement = this.elementRef.nativeElement.querySelector(
-                this.defaultInputMaskConfig.inputSelector
-              );
+              const nativeInputElement =
+                this.elementRef.nativeElement.querySelector(
+                  this.defaultInputMaskConfig.inputSelector
+                );
               if (nativeInputElement) {
                 this.nativeInputElement = nativeInputElement;
                 this.mutationObserver?.disconnect();
