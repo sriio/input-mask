@@ -1,3 +1,10 @@
+## [5.0.1](https://github.com/ngneat/input-mask/compare/v5.0.0...v5.0.1) (2021-11-25)
+
+
+### Bug Fixes
+
+* implement the `setDisabledState` on the `inputMask` value accessor ([36d37ed](https://github.com/ngneat/input-mask/commit/36d37ed1fe037a3625903bccae8960edda80189f))
+
 # [5.0.0](https://github.com/ngneat/input-mask/compare/v4.0.1...v5.0.0) (2021-11-23)
 
 
