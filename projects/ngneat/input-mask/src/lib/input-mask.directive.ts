@@ -58,7 +58,7 @@ export class InputMaskDirective<T = any>
     @Inject(PLATFORM_ID) private platformId: string,
     private elementRef: ElementRef<HTMLInputElement | any>,
     private renderer: Renderer2,
-    @Optional() @Self() public ngControl: NgControl,
+    @Optional() @Self() public ngControl: NgControl | null,
     @Inject(INPUT_MASK_CONFIG) config: InputMaskConfig,
     private ngZone: NgZone
   ) {
@@ -75,12 +75,15 @@ export class InputMaskDirective<T = any>
   onTouched = (_: any) => {};
 
   ngOnInit() {
-    this.ngControl?.control?.setValidators(
-      this.ngControl.control.validator
-        ? [this.ngControl.control.validator, this.validate.bind(this)]
-        : [this.validate.bind(this)]
-    );
-    this.ngControl?.control?.updateValueAndValidity();
+    if (this.control) {
+      this.control.setValidators(
+        this.control.validator
+          ? [this.control.validator, this.validate]
+          : [this.validate]
+      );
+
+      this.control.updateValueAndValidity();
+    }
   }
 
   ngOnDestroy(): void {
@@ -102,9 +105,13 @@ export class InputMaskDirective<T = any>
         this.nativeInputElement as HTMLInputElement
       )
     );
-    setTimeout(() => {
-      this.ngControl?.control?.updateValueAndValidity();
-    });
+
+    if (this.control) {
+      setTimeout(() => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        this.control!.updateValueAndValidity();
+      });
+    }
   }
 
   ngAfterViewInit() {
@@ -133,12 +140,20 @@ export class InputMaskDirective<T = any>
     this.onTouched = fn;
   }
 
-  validate(control: AbstractControl): { [key: string]: any } | null {
-    return !control.value ||
+  validate = (control: AbstractControl): { [key: string]: any } | null => !control.value ||
       !this.inputMaskPlugin ||
       this.inputMaskPlugin.isValid()
       ? null
       : { inputMask: true };
+
+  setDisabledState(disabled: boolean): void {
+    if (this.nativeInputElement) {
+      this.renderer.setProperty(this.nativeInputElement, 'disabled', disabled);
+    }
+  }
+
+  private get control(): AbstractControl | null | undefined {
+    return this.ngControl?.control;
   }
 
   private setNativeInputElement(config: InputMaskConfig) {

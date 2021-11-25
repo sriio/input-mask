@@ -35,6 +35,7 @@ class CustomInputComponent implements OnInit {
     <input class="date" [inputMask]="dateMask" [formControl]="dateFC" />
     <input class="ip" [inputMask]="ipAddressMask" [formControl]="ipFC" />
     <input class="initDate" [inputMask]="dateMask" [formControl]="initDateFC" />
+    <input class="phone" [inputMask]="phoneMask" [formControl]="phoneFC" />
     <lib-custom-input
       [formControl]="dateFCCustom"
       [inputMask]="dateMask"
@@ -60,6 +61,9 @@ class TestComponent {
 
   ipAddressMask = createMask({ alias: 'ip' });
   ipFC = new FormControl('');
+
+  phoneFC = new FormControl({ value: '', disabled: true });
+  phoneMask = createMask('(999) 999-9999');
 
   dateFCCustom = new FormControl('');
   isAsync = false;
@@ -158,6 +162,12 @@ describe('InputMaskDirective', () => {
     spectator.component.dateFCCustom.setValue('28/02/1992');
     expect(input.value).toEqual('28/02/1992');
   }));
+
+  it('should disable the input if the disabled property was provided through a FormControl options', () => {
+    expect(spectator.query('.phone')).toHaveAttribute('disabled');
+    spectator.component.phoneFC.enable();
+    expect(spectator.query('.phone')).not.toHaveAttribute('disabled');
+  });
 });
 
 describe('Change detection', () => {
