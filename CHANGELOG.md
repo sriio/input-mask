@@ -1,3 +1,10 @@
+# [5.1.0-beta.1](https://github.com/ngneat/input-mask/compare/v5.0.1...v5.1.0-beta.1) (2022-01-05)
+
+
+### Features
+
+* updated version inputmask library ([706db4b](https://github.com/ngneat/input-mask/commit/706db4be25f56a5ef6e1623d574bcfcf1abf013a))
+
 ## [5.0.1](https://github.com/ngneat/input-mask/compare/v5.0.0...v5.0.1) (2021-11-25)
 
 
