@@ -346,6 +346,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/RobinHerbots"><img src="https://avatars.githubusercontent.com/u/318447?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Robin Herbots</b></sub></a><br /><a href="#ideas-RobinHerbots" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/pzontrop"><img src="https://avatars.githubusercontent.com/u/7068447?v=4?s=100" width="100px;" alt=""/><br /><sub><b>P. Zontrop</b></sub></a><br /><a href="#platform-pzontrop" title="Packaging/porting to new platform">📦</a></td>
     <td align="center"><a href="https://medium.com/@overthesanity"><img src="https://avatars.githubusercontent.com/u/7337691?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Artur Androsovych</b></sub></a><br /><a href="#maintenance-arturovt" title="Maintenance">🚧</a> <a href="https://github.com/ngneat/input-mask/commits?author=arturovt" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/bogusweb"><img src="https://avatars.githubusercontent.com/u/5169399?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Pawel Boguslawski</b></sub></a><br /><a href="#maintenance-bogusweb" title="Maintenance">🚧</a></td>
   </tr>
 </table>
 
