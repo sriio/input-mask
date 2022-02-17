@@ -1,6 +1,5 @@
 import { isPlatformServer } from '@angular/common';
 import {
-  AfterViewInit,
   Directive,
   ElementRef,
   HostListener,
@@ -18,12 +17,14 @@ import {
   AbstractControl,
   ControlValueAccessor,
   NgControl,
+  ValidationErrors,
   Validator,
 } from '@angular/forms';
 import _Inputmask from 'inputmask';
 import type Inputmask from 'inputmask';
-import { InputMaskConfig, INPUT_MASK_CONFIG } from './config';
+
 import { InputmaskOptions } from './types';
+import { InputMaskConfig, INPUT_MASK_CONFIG } from './config';
 
 // The initial issue: https://github.com/ngneat/input-mask/issues/40
 // Webpack 5 has module resolution changes. Libraries should configure the `output.export`
@@ -41,18 +42,34 @@ const InputmaskConstructor =
   selector: '[inputMask]',
 })
 export class InputMaskDirective<T = any>
-  implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor, Validator
+  implements OnInit, OnDestroy, ControlValueAccessor, Validator
 {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  static ngAcceptInputType_inputMask: InputmaskOptions<any> | null | undefined;
+
   /**
-   *Helps you to create input-mask based on https://github.com/RobinHerbots/Inputmask
-   *Supports form-validation out-of-the box.
-   *Visit https://github.com/ngneat/input-mask for more info.
+   * Helps you to create input-mask based on https://github.com/RobinHerbots/Inputmask
+   * Supports form-validation out-of-the box.
+   * Visit https://github.com/ngneat/input-mask for more info.
    */
-  @Input() inputMask: InputmaskOptions<T> = {};
-  inputMaskPlugin: Inputmask.Instance | undefined;
-  nativeInputElement: HTMLInputElement | undefined;
+  @Input()
+  set inputMask(inputMask: InputmaskOptions<T> | null | undefined) {
+    if (inputMask) {
+      this.inputMaskOptions = inputMask;
+      this.updateInputMask();
+    }
+  }
+
+  inputMaskPlugin: Inputmask.Instance | null = null;
+  nativeInputElement: HTMLInputElement | null = null;
   defaultInputMaskConfig = new InputMaskConfig();
-  private mutationObserver: MutationObserver | undefined;
+
+  private inputMaskOptions: InputmaskOptions<T> | null = null;
+
+  /* The original `onChange` function coming from the `setUpControl`. */
+  private onChange: (value: T | null) => void = () => {};
+
+  private mutationObserver: MutationObserver | null = null;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: string,
@@ -74,7 +91,7 @@ export class InputMaskDirective<T = any>
   @HostListener('blur', ['$event.target.value'])
   onTouched = (_: any) => {};
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.control) {
       this.control.setValidators(
         this.control.validator
@@ -87,40 +104,8 @@ export class InputMaskDirective<T = any>
   }
 
   ngOnDestroy(): void {
-    this.inputMaskPlugin?.remove();
+    this.removeInputMaskPlugin();
     this.mutationObserver?.disconnect();
-  }
-
-  initInputMask() {
-    if (
-      isPlatformServer(this.platformId) ||
-      !this.nativeInputElement ||
-      !Object.keys(this.inputMask).length
-    ) {
-      return;
-    }
-
-    this.inputMaskPlugin = this.ngZone.runOutsideAngular(() =>
-      new InputmaskConstructor(this.inputMaskOptions).mask(
-        this.nativeInputElement as HTMLInputElement
-      )
-    );
-
-    if (this.control) {
-      setTimeout(() => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        this.control!.updateValueAndValidity();
-      });
-    }
-  }
-
-  ngAfterViewInit() {
-    this.initInputMask();
-  }
-
-  get inputMaskOptions(): Inputmask.Options {
-    const { parser, ...options } = this.inputMask;
-    return options;
   }
 
   writeValue(value: string): void {
@@ -129,26 +114,59 @@ export class InputMaskDirective<T = any>
     }
   }
 
-  registerOnChange(fn: (_: T | null) => void): void {
-    const parser = this.inputMask.parser;
+  registerOnChange(onChange: (value: T | null) => void): void {
+    this.onChange = onChange;
+    const parser = this.inputMaskOptions?.parser;
     this.onInput = (value) => {
-      fn(parser && value ? parser(value) : value);
+      this.onChange(parser && value ? parser(value) : value);
     };
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: VoidFunction): void {
     this.onTouched = fn;
   }
 
-  validate = (control: AbstractControl): { [key: string]: any } | null => !control.value ||
-      !this.inputMaskPlugin ||
-      this.inputMaskPlugin.isValid()
+  validate = (control: AbstractControl): ValidationErrors | null =>
+    !control.value || !this.inputMaskPlugin || this.inputMaskPlugin.isValid()
       ? null
       : { inputMask: true };
 
   setDisabledState(disabled: boolean): void {
     if (this.nativeInputElement) {
       this.renderer.setProperty(this.nativeInputElement, 'disabled', disabled);
+    }
+  }
+
+  private updateInputMask(): void {
+    this.removeInputMaskPlugin();
+    this.createInputMaskPlugin();
+    // This re-creates the `onInput` function since `inputMaskOptions` might be changed and the `parser`
+    // property now differs.
+    this.registerOnChange(this.onChange);
+  }
+
+  private createInputMaskPlugin(): void {
+    const { nativeInputElement, inputMaskOptions } = this;
+
+    if (
+      isPlatformServer(this.platformId) ||
+      !nativeInputElement ||
+      inputMaskOptions === null ||
+      Object.keys(inputMaskOptions).length === 0
+    ) {
+      return;
+    }
+
+    const { parser, ...options } = inputMaskOptions;
+    this.inputMaskPlugin = this.ngZone.runOutsideAngular(() =>
+      new InputmaskConstructor(options).mask(nativeInputElement)
+    );
+
+    if (this.control) {
+      setTimeout(() => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        this.control!.updateValueAndValidity();
+      });
     }
   }
 
@@ -176,7 +194,7 @@ export class InputMaskDirective<T = any>
               if (nativeInputElement) {
                 this.nativeInputElement = nativeInputElement;
                 this.mutationObserver?.disconnect();
-                this.initInputMask();
+                this.createInputMaskPlugin();
               }
             }
           }
@@ -193,5 +211,10 @@ export class InputMaskDirective<T = any>
         );
       }
     }
+  }
+
+  private removeInputMaskPlugin(): void {
+    this.inputMaskPlugin?.remove();
+    this.inputMaskPlugin = null;
   }
 }

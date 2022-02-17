@@ -36,6 +36,11 @@ class CustomInputComponent implements OnInit {
     <input class="ip" [inputMask]="ipAddressMask" [formControl]="ipFC" />
     <input class="initDate" [inputMask]="dateMask" [formControl]="initDateFC" />
     <input class="phone" [inputMask]="phoneMask" [formControl]="phoneFC" />
+    <input
+      class="dynamic"
+      [inputMask]="dynamicMask"
+      [formControl]="dynamicMaskFC"
+    />
     <lib-custom-input
       [formControl]="dateFCCustom"
       [inputMask]="dateMask"
@@ -64,6 +69,9 @@ class TestComponent {
 
   phoneFC = new FormControl({ value: '', disabled: true });
   phoneMask = createMask('(999) 999-9999');
+
+  dynamicMask: InputmaskOptions<unknown> | null = null;
+  dynamicMaskFC = new FormControl();
 
   dateFCCustom = new FormControl('');
   isAsync = false;
@@ -167,6 +175,20 @@ describe('InputMaskDirective', () => {
     expect(spectator.query('.phone')).toHaveAttribute('disabled');
     spectator.component.phoneFC.enable();
     expect(spectator.query('.phone')).not.toHaveAttribute('disabled');
+  });
+
+  it('should be possible to update the `inputMask` binding dynamically', () => {
+    spectator.component.dynamicMask = spectator.component.ipAddressMask;
+    spectator.detectComponentChanges();
+    spectator.typeInElement('111111111111', '.dynamic');
+    expect(spectator.component.dynamicMaskFC.value).toEqual('111.111.111.111');
+
+    spectator.component.dynamicMask = spectator.component.dateMask;
+    spectator.detectComponentChanges();
+    spectator.typeInElement('28021992', '.dynamic');
+    expect(spectator.component.dynamicMaskFC.value).toEqual(
+      new Date(1992, 1, 28)
+    );
   });
 });
 
