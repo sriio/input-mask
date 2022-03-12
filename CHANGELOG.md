@@ -1,3 +1,10 @@
+# [5.2.0](https://github.com/ngneat/input-mask/compare/v5.1.0...v5.2.0) (2022-03-12)
+
+
+### Features
+
+* allow changing `inputMask` binding ([be18fd3](https://github.com/ngneat/input-mask/commit/be18fd39e36f2656a4e7c8c2942940982ffc3f39))
+
 # [5.1.0](https://github.com/ngneat/input-mask/compare/v5.0.1...v5.1.0) (2022-01-05)
 
 
