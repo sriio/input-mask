@@ -5,6 +5,7 @@ import { InputMaskModule } from './input-mask.module';
 import { createMask } from './constants';
 import { InputmaskOptions } from './types';
 import { fakeAsync } from '@angular/core/testing';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'lib-custom-input',
@@ -33,6 +34,11 @@ class CustomInputComponent implements OnInit {
 @Component({
   template: `
     <input class="date" [inputMask]="dateMask" [formControl]="dateFC" />
+    <input
+      class="dateFormatter"
+      [inputMask]="dateMaskFormatter"
+      [formControl]="dateFCFormatter"
+    />
     <input class="ip" [inputMask]="ipAddressMask" [formControl]="ipFC" />
     <input class="initDate" [inputMask]="dateMask" [formControl]="initDateFC" />
     <input class="phone" [inputMask]="phoneMask" [formControl]="phoneFC" />
@@ -61,6 +67,17 @@ class TestComponent {
       return new Date(year, month, date);
     },
   });
+  dateMaskFormatter = createMask({
+    alias: 'datetime',
+    inputFormat: 'dd/MM/yyyy',
+    formatter: (value: string) => {
+      const values = value.split('-');
+      const date = +values[2];
+      const month = +values[1] - 1;
+      const year = +values[0];
+      return formatDate(new Date(year, month, date), 'dd/MM/yyyy', 'en-US');
+    },
+  });
   dateFC = new FormControl('', [Validators.required]);
   initDateFC = new FormControl('28/02/1992');
 
@@ -75,6 +92,8 @@ class TestComponent {
 
   dateFCCustom = new FormControl('');
   isAsync = false;
+
+  dateFCFormatter = new FormControl('1990-12-28');
 }
 
 describe('InputMaskDirective', () => {
@@ -105,6 +124,11 @@ describe('InputMaskDirective', () => {
   it('should update the control value as per mask parser', () => {
     spectator.typeInElement('28021992', '.date');
     expect(spectator.component.dateFC.value).toEqual(new Date(1992, 1, 28));
+  });
+
+  it('should update the control value as per mask formatter', () => {
+    const input = spectator.query('.dateFormatter') as HTMLInputElement;
+    expect(input.value).toEqual('28/12/1990');
   });
 
   it('should keep the existing validators', () => {

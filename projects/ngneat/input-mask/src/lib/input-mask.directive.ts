@@ -109,8 +109,13 @@ export class InputMaskDirective<T = any>
   }
 
   writeValue(value: string): void {
+    const formatter = this.inputMaskOptions?.formatter;
     if (this.nativeInputElement) {
-      this.renderer.setProperty(this.nativeInputElement, 'value', value ?? '');
+      this.renderer.setProperty(
+        this.nativeInputElement,
+        'value',
+        formatter && value ? formatter(value) : value ?? ''
+      );
     }
   }
 
@@ -157,7 +162,7 @@ export class InputMaskDirective<T = any>
       return;
     }
 
-    const { parser, ...options } = inputMaskOptions;
+    const { parser, formatter, ...options } = inputMaskOptions;
     this.inputMaskPlugin = this.ngZone.runOutsideAngular(() =>
       new InputmaskConstructor(options).mask(nativeInputElement)
     );
