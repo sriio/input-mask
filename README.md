@@ -332,6 +332,40 @@ export class AppComponent {
 
 In above example, whenver you try to access `dateFC.value`, it won't be the string which user entered, but rather a `Date` created based on the `parser` function.
 
+### `formatter` function
+
+Apart from the parser function, we have added one more option called `formatter`. This helps you if you want to change the format of a date you receive from the Database.
+
+For example, you receive a date from your database in the format 'yyyy-MM-dd' but you want to display it 'dd/MM/yyyy'.
+
+```typescript
+@Component({
+  template: `
+    <input
+      [inputMask]="dateInputMask"
+      [formControl]="dateFC"
+      placeholder="dd/mm/yyyy"
+    />
+  `,
+})
+export class AppComponent {
+  dateInputMask = createMask<Date>({
+    alias: 'datetime',
+    inputFormat: 'dd/MM/yyyy',
+    formatter: (value: string) => {
+      const values = value.split('-');
+      const date = +values[2];
+      const month = +values[1] - 1;
+      const year = +values[0];
+      return formatDate(new Date(year, month, date), 'dd/MM/yyyy', 'en-US');
+    },
+  });
+
+  dateFC = new FormControl('1990-12-28');
+}
+```
+
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
