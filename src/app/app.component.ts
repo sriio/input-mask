@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { createMask } from '@ngneat/input-mask';
 
 @Component({
@@ -43,7 +43,7 @@ export class AppComponent {
   licensePlateInputMask = createMask('[9-]AAA-999');
 
   ipAddressMask = createMask({ alias: 'ip' });
-  ipAddress = new FormControl('');
-  dateFC = new FormControl('', [Validators.required]);
-  dateFCCustom = new FormControl('');
+  ipAddress = new UntypedFormControl('');
+  dateFC = new UntypedFormControl('', [Validators.required]);
+  dateFCCustom = new UntypedFormControl('');
 }

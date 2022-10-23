@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { InputmaskOptions } from '@ngneat/input-mask';
 
 @Component({
@@ -8,7 +8,7 @@ import { InputmaskOptions } from '@ngneat/input-mask';
   styleUrls: ['./custom-input.component.scss'],
 })
 export class CustomInputComponent implements OnInit {
-  @Input() formControl!: FormControl;
+  @Input() formControl!: UntypedFormControl;
   @Input() inputMask!: InputmaskOptions<any>;
   @Input() placeholder: string | undefined;
 
