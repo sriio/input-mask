@@ -1,3 +1,10 @@
+# [5.3.0-beta.1](https://github.com/ngneat/input-mask/compare/v5.2.0...v5.3.0-beta.1) (2022-11-02)
+
+
+### Features
+
+* support for angular 14 ([5a715e6](https://github.com/ngneat/input-mask/commit/5a715e6261b1e95204af41db8c4c85d57f824a1e))
+
 # [5.2.0](https://github.com/ngneat/input-mask/compare/v5.1.0...v5.2.0) (2022-03-12)
 
 
