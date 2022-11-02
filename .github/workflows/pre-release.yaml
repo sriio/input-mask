@@ -24,7 +24,7 @@ jobs:
           npm ci
           npm run lint
           npm run build -- --configuration production
-          npm run test:lib:ci
+          npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI 
           npm run build:lib
 
       - name: Trigger release

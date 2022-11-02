@@ -15,8 +15,6 @@
     "deploy": "ng deploy --base-href=https://username.github.io/repo/",
     "copy": "cpx README.md dist/ngneat/input-mask",
     "build:lib": "ng build @ngneat/input-mask --configuration production && npm run copy",
-    "test:lib": "ng test @ngneat/input-mask",
-    "test:lib:ci": "cross-env CI=true npm run test:lib",
     "postbuild:lib": "npm run build --prefix projects/ngneat/input-mask",
     "semantic-release": "semantic-release",
     "prepare": "husky install"
