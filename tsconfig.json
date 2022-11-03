@@ -13,16 +13,11 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es2020",
     "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "lib": ["es2018", "dom"],
     "paths": {
-      "@ngneat/input-mask": [
-        "projects/ngneat/input-mask/src/public-api.ts"
-      ]
+      "@ngneat/input-mask": ["projects/ngneat/input-mask/src/public-api.ts"]
     }
   },
   "angularCompilerOptions": {
