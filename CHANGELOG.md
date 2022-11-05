@@ -1,3 +1,15 @@
+# [6.0.0](https://github.com/ngneat/input-mask/compare/v5.3.0...v6.0.0) (2022-11-05)
+
+
+### Features
+
+* support for Angular 14 (manual trigger) ([aa3bb18](https://github.com/ngneat/input-mask/commit/aa3bb18d1e72b46bbb281cda9ec5698a10a5f14f))
+
+
+### BREAKING CHANGES
+
+* Adds support for Angular 14
+
 # [5.3.0](https://github.com/ngneat/input-mask/compare/v5.2.0...v5.3.0) (2022-11-05)
 
 
