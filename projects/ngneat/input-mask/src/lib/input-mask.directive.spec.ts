@@ -1,5 +1,9 @@
 import { ApplicationRef, Component, Input, OnInit } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  UntypedFormControl,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { InputMaskModule } from './input-mask.module';
 import { createMask } from './constants';
@@ -18,7 +22,7 @@ import { formatDate } from '@angular/common';
   />`,
 })
 class CustomInputComponent implements OnInit {
-  @Input() formControl!: FormControl;
+  @Input() formControl!: UntypedFormControl;
   @Input() inputMask!: InputmaskOptions<any>;
   @Input() placeholder: string | undefined;
   @Input() isAsync = false;
@@ -78,19 +82,19 @@ class TestComponent {
       return formatDate(new Date(year, month, date), 'dd/MM/yyyy', 'en-US');
     },
   });
-  dateFC = new FormControl('', [Validators.required]);
-  initDateFC = new FormControl('28/02/1992');
+  dateFC = new UntypedFormControl('', [Validators.required]);
+  initDateFC = new UntypedFormControl('28/02/1992');
 
   ipAddressMask = createMask({ alias: 'ip' });
-  ipFC = new FormControl('');
+  ipFC = new UntypedFormControl('');
 
-  phoneFC = new FormControl({ value: '', disabled: true });
+  phoneFC = new UntypedFormControl({ value: '', disabled: true });
   phoneMask = createMask('(999) 999-9999');
 
   dynamicMask: InputmaskOptions<unknown> | null = null;
-  dynamicMaskFC = new FormControl();
+  dynamicMaskFC = new UntypedFormControl();
 
-  dateFCCustom = new FormControl('');
+  dateFCCustom = new UntypedFormControl('');
   isAsync = false;
 
   dateFCFormatter = new FormControl('1990-12-28');
@@ -223,7 +227,7 @@ describe('Change detection', () => {
   })
   class ChangeDetectionTestComponent {
     ipAddressMask = createMask({ alias: 'ip' });
-    ipFC = new FormControl('');
+    ipFC = new UntypedFormControl('');
   }
 
   const createComponent = createComponentFactory({

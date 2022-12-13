@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import { isPlatformServer } from '@angular/common';
 import {
   Directive,
@@ -39,6 +40,7 @@ const InputmaskConstructor =
   _Inputmask;
 
 @Directive({
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[inputMask]',
 })
 export class InputMaskDirective<T = any>
