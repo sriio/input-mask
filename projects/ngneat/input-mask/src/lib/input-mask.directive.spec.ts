@@ -97,7 +97,7 @@ class TestComponent {
   dateFCCustom = new UntypedFormControl('');
   isAsync = false;
 
-  dateFCFormatter = new FormControl('1990-12-28');
+  dateFCFormatter = new UntypedFormControl('1990-12-28');
 }
 
 describe('InputMaskDirective', () => {
