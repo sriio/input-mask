@@ -1,3 +1,10 @@
+# [6.1.0](https://github.com/ngneat/input-mask/compare/v6.0.0...v6.1.0) (2023-01-24)
+
+
+### Features
+
+* trigger release ([98f8b88](https://github.com/ngneat/input-mask/commit/98f8b882db336e6f5d53f671f4f505db3aef3981))
+
 # [6.0.0](https://github.com/ngneat/input-mask/compare/v5.3.0...v6.0.0) (2022-11-05)
 
 
