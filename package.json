@@ -29,7 +29,7 @@
     "@angular/platform-browser-dynamic": "^14.2.8",
     "@angular/router": "^14.2.8",
     "@ngneat/lib": "^5.0.0",
-    "inputmask": "^5.0.7",
+    "inputmask": "^5.0.9-beta.30",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.1",
     "zone.js": "~0.11.4"
